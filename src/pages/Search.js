@@ -84,7 +84,7 @@ export default function Search() {
       const fetchCountyData = async () => {
         if (county !== null && state !== null) {
             try {
-              const { data } = await axios.get(`http://54.242.10.76:5000/county/${county}/${state}`);
+              const { data } = await axios.get(`https://54.242.10.76:5000/county/${county}/${state}`);
               console.log("fetchCountyData: ",data);
               setSingleCounty(data);
               
@@ -109,9 +109,9 @@ export default function Search() {
         console.log(singleCounty);
         if (JSON.stringify(singleCounty) !== '{}') {
             try {
-              const { data : queryDropOffs} = await axios.get(`http://54.242.10.76:5000/dropOff/${singleCounty.name}/${singleCounty.state}`);
-              const { data : queryMicroHaulers} = await axios.get(`http://54.242.10.76:5000/microHauler/${singleCounty.name}/${singleCounty.state}`);
-              const { data : querySmartBins} = await axios.get(`http://54.242.10.76:5000/smartBin/${singleCounty.name}/${singleCounty.state}`);
+              const { data : queryDropOffs} = await axios.get(`https://54.242.10.76:5000/dropOff/${singleCounty.name}/${singleCounty.state}`);
+              const { data : queryMicroHaulers} = await axios.get(`https://54.242.10.76:5000/microHauler/${singleCounty.name}/${singleCounty.state}`);
+              const { data : querySmartBins} = await axios.get(`https://54.242.10.76:5000/smartBin/${singleCounty.name}/${singleCounty.state}`);
               setDropOffs(queryDropOffs);
               setMicroHaulers(queryMicroHaulers);
               setSmartBins(querySmartBins);
