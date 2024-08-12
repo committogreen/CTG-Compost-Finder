@@ -38,4 +38,5 @@ app.use('/dropOff',dropOffRouter)
 app.use('/microHauler',microhaulerRouter)
 app.use('/smartBin',smartBinRouter)
 const PORT= process.env.PORT || 5000;
+console.log("PORT:: ", PORT);
 app.listen(PORT, 5000,()=> {console.log("server started on port 5000")})

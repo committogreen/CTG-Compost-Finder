@@ -60,10 +60,12 @@ export default function Search() {
             if (isNaN(parseInt(location.at(-2)))) { //check if there is a zipcode
               setState(location.at(-2));
               setCounty(translateSpecialCase(location.at(-2),location.at(-3).replace(/ County$/, '')));
+              console.log("county fromm lookUp withhh ZipCode", singleCounty);
             }
             else {
               setState(location.at(-3));
               setCounty(translateSpecialCase(location.at(-3),location.at(-4).replace(/ County$/, '')));
+              console.log("county fromm lookUp", singleCounty);
             }
             setCoordinates(coords);
           } catch (error) {
@@ -82,7 +84,7 @@ export default function Search() {
       const fetchCountyData = async () => {
         if (county !== null && state !== null) {
             try {
-              const { data } = await axios.get(`http://localhost:5000/county/${county}/${state}`);
+              const { data } = await axios.get(`http://54.242.10.76:5000/county/${county}/${state}`);
               console.log("fetchCountyData: ",data);
               setSingleCounty(data);
               
@@ -107,9 +109,9 @@ export default function Search() {
         console.log(singleCounty);
         if (JSON.stringify(singleCounty) !== '{}') {
             try {
-              const { data : queryDropOffs} = await axios.get(`http://localhost:5000/dropOff/${singleCounty.name}/${singleCounty.state}`);
-              const { data : queryMicroHaulers} = await axios.get(`http://localhost:5000/microHauler/${singleCounty.name}/${singleCounty.state}`);
-              const { data : querySmartBins} = await axios.get(`http://localhost:5000/smartBin/${singleCounty.name}/${singleCounty.state}`);
+              const { data : queryDropOffs} = await axios.get(`http://54.242.10.76:5000/dropOff/${singleCounty.name}/${singleCounty.state}`);
+              const { data : queryMicroHaulers} = await axios.get(`http://54.242.10.76:5000/microHauler/${singleCounty.name}/${singleCounty.state}`);
+              const { data : querySmartBins} = await axios.get(`http://54.242.10.76:5000/smartBin/${singleCounty.name}/${singleCounty.state}`);
               setDropOffs(queryDropOffs);
               setMicroHaulers(queryMicroHaulers);
               setSmartBins(querySmartBins);
