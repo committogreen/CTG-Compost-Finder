@@ -170,6 +170,7 @@ export default function SearchResult() {
           setMicroHaulers([]);
           setDropOffs([]);
           setCoordinates([]);
+          localStorage.clear();
           
           }} >
           <Link className='back-button' to="/search">&nbsp;&nbsp;&nbsp;Back to Search</Link>

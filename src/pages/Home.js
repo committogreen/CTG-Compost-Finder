@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
+import { useEffect } from 'react';
 import homeIcon1 from "../assets/homeIcon1.png";
 import homeIcon2 from "../assets/homeIcon2.png";
 import homeIcon3 from "../assets/homeIcon3.png";
 
+
 export default function Home() {
+
   return (
     <div className='home-page'>
       <header className="home-page-header header">
