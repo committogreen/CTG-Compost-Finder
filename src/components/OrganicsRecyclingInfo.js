@@ -25,19 +25,19 @@ export default function OrganicsRecyclingInfo({ address }) {
 
   function expand(event) {
     if (shownItem == event.target.name) {
-      console.log("shownItem",shownItem);
+      console.log("shownItem", shownItem);
       setShownItem("");
     }
     else {
-      console.log("In the else statement",event.target.name);
+      console.log("In the else statement", event.target.name);
       setShownItem(event.target.name);
     }
   }
-// everytime a user clicks a marker on the map::
-//wheather it be a smartBin or dropoff -> setShownItem("solution");
+  // everytime a user clicks a marker on the map::
+  //wheather it be a smartBin or dropoff -> setShownItem("solution");
   useEffect(() => {
     if (Object.keys(selectedLocation).length !== 0) {
-      console.log("selectedLocation",selectedLocation)
+      console.log("selectedLocation", selectedLocation)
       setShownItem("solution");
     }
   }, [selectedLocation])
@@ -103,7 +103,7 @@ export default function OrganicsRecyclingInfo({ address }) {
             Select a Composting Solution Near You
           </h3>
           <button name="solution" className={shownItem === "solution" ? "collapse-button" : "expand-button"} onClick={expand}>
-          </button> 
+          </button>
         </div>
         <div className="OrganicsRecyclingInfo-Description">
           {shownItem == "solution" ?
@@ -134,6 +134,19 @@ export default function OrganicsRecyclingInfo({ address }) {
         </div>
         <div className="OrganicsRecyclingInfo-Description">
           {shownItem == "pillars" ? <FourPillarsDescription /> : ""}
+        </div>
+      </div>
+      <div className="OrganicsRecyclingInfo-Section">
+        <div className="OrganicsRecyclingInfo-Dropdown">
+          <img className="OrganicsRecyclingInfo-Icon" src={faqIcon}></img>
+          <h3 className="OrganicsRecyclingInfo-Header">
+            Don't see your spot? Let us know!
+          </h3>
+          <button name="suggestions" className={shownItem === "suggestions" ? "collapse-button" : "expand-button"} onClick={expand}>
+          </button>
+        </div>
+        <div className="OrganicsRecyclingInfo-Description">
+          {shownItem == "suggestions" ? "Insert suggestion here" : ""}
         </div>
       </div>
     </div>
