@@ -1,27 +1,26 @@
 import React, { useState, useContext, createContext,useEffect } from "react";
 
-const MicroHaulerContext= createContext();
+const MicrohaulerContext= createContext();
 
-export function MicroHaulerProvider({children}){
-    const storedMicroHaulers=localStorage.getItem('microHaulers');
-    let parsedMicroHaulers;
-    if(storedMicroHaulers){
-        parsedMicroHaulers= JSON.parse(storedMicroHaulers);
+export function MicrohaulerProvider({children}){
+    const storedMicrohaulers=localStorage.getItem('microhaulers');
+    let parsedMicrohaulers;
+    if(storedMicrohaulers){
+        parsedMicrohaulers= JSON.parse(storedMicrohaulers);
     }else{
-        parsedMicroHaulers= [];
+        parsedMicrohaulers= [];
     }
-    const [microHaulers, setMicroHaulers] = useState(parsedMicroHaulers);
-    const [singleMicroHauler,setSingleMicroHauler]= useState({});
+    const [microhaulers, setMicrohaulers] = useState(parsedMicrohaulers);
     useEffect(()=>{
-        localStorage.setItem('microHaulers',JSON.stringify(microHaulers))
-      },[microHaulers])
+        localStorage.setItem('microhaulers',JSON.stringify(microhaulers))
+      },[microhaulers])
 
     return (
-        <MicroHaulerContext.Provider value={{microHaulers,setMicroHaulers,singleMicroHauler,setSingleMicroHauler}}>
+        <MicrohaulerContext.Provider value={{microhaulers,setMicrohaulers}}>
             {children} 
-        </MicroHaulerContext.Provider>
+        </MicrohaulerContext.Provider>
     );
 
 }
 
-export const useMicroHaulerContext=() => useContext(MicroHaulerContext);
+export const useMicrohaulerContext=() => useContext(MicrohaulerContext);

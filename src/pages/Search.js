@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import { useCountyContext } from "../components/countyProvider.js";
 import { useDropOffContext } from '../components/dropOffProvider.js';
-import { useMicroHaulerContext } from '../components/microHaulerProvider.js';
+import { useMicrohaulerContext } from '../components/microhaulerProvider.js';
 import { useSmartBinContext } from '../components/smartBinsProvider.js';
 
 import strongPolicyIcon from "../assets/strongPolicyIcon.png";
@@ -16,24 +16,22 @@ import noPolicyIcon from "../assets/noPolicyIcon.png";
 export default function Search() {
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
-  const [step, setStep] = useState(0);
   const { setAddress, setSingleCounty, setCoordinates } = useCountyContext();
   const { setDropOffs } = useDropOffContext();
-  const { setMicroHaulers } = useMicroHaulerContext();
+  const { setMicroHaulers } = useMicrohaulerContext();
   const { setSmartBins } = useSmartBinContext();
   const navigate = useNavigate();
+
   useEffect(() => {
     // Reset coordinates when the component mounts
     setCoordinates([40.7, -74]);
   }, [setCoordinates]); 
   
-  
-
   const handleSubmit = async () => {
     try {
       setAddress(input);
     
-
+      // Translate OSM search result to database entries
       const translateSpecialCase = (state, county) => {
         if (state === "New York" && county === "Kings") return "Brooklyn";
         if (state === "New York" && county === "The Bronx") return "Bronx";
@@ -41,18 +39,14 @@ export default function Search() {
       };
 
       // Fetch coordinates
-      const { data: [lookup] } = await axios.get(`https://nominatim.openstreetmap.org/search?q=${input}&format=json`);
+      const { data: [lookup] } = await axios.get(`https://nominatim.openstreetmap.org/search?q=${input}&format=json&addressdetails=1`);
+      console.log("lookup: ",lookup);
       const coords = [parseFloat(lookup.lat), parseFloat(lookup.lon)];
-      const location = lookup.display_name.split(", ");
-      let state, county;
-      if (isNaN(parseInt(location.at(-2)))) {
-        state = location.at(-2);
-        county = translateSpecialCase(location.at(-2), location.at(-3).replace(/ County$/, ''));
-      } else {
-        state = location.at(-3);
-        county = translateSpecialCase(location.at(-3), location.at(-4).replace(/ County$/, ''));
-      }
       setCoordinates(coords);
+
+      const state = lookup.address.state;
+      const county = (lookup.address.suburb ? lookup.address.suburb.replace(/ County$/, '') : translateSpecialCase(state, lookup.address.county.replace(/ County$/, '')));
+      console.log(county, state);
 
       // Fetch county data
       const { data: countyData } = await axios.get(`http://54.242.10.76:5000/county/${county}/${state}`);

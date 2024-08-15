@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
 import { useDropOffContext } from "./dropOffProvider";
-import { useMicroHaulerContext } from "./microHaulerProvider";
+import { useMicrohaulerContext } from "./microhaulerProvider.js";
 import { useSmartBinContext } from './smartBinsProvider.js';
 import { useCountyContext } from './countyProvider.js';
 
 export default function DistrictInfoTable() {
   const [services, setServices] = useState([]);
   const { dropOffs } = useDropOffContext();
-  const { microHaulers } = useMicroHaulerContext();
+  const { microhaulers } = useMicrohaulerContext();
   const { smartBins } = useSmartBinContext();
   const { singleCounty } = useCountyContext();
 
 
   useEffect(() => {
     console.log("dropOffs ",dropOffs);
-    console.log("microHaulers ",microHaulers);
+    console.log("microhaulers ",microhaulers);
     console.log("smartBins ",smartBins );
   
     const services = Array(4).fill("no");
@@ -25,8 +25,8 @@ export default function DistrictInfoTable() {
       if (dropOffs.length !== 0) {
         services[1] = "yes";
       }
-      if (microHaulers.length !== 0) {
-        console.log("asdas",microHaulers);
+      if (microhaulers.length !== 0) {
+        console.log("asdas",microhaulers);
         services[2] = "yes";
       }
       if (smartBins.length !== 0) {
@@ -35,7 +35,7 @@ export default function DistrictInfoTable() {
     }
     
     setServices(services);
-  }, [singleCounty, dropOffs, microHaulers, smartBins])
+  }, [singleCounty, dropOffs, microhaulers, smartBins])
 
   return (
     <div className="DistrictInfo-Services">
