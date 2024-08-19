@@ -15,6 +15,7 @@ import noPolicyIcon from "../assets/noPolicyIcon.png";
 
 export default function Search() {
   const [input, setInput] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const { setAddress, setSingleCounty, setCoordinates } = useCountyContext();
   const { setDropOffs } = useDropOffContext();
@@ -25,12 +26,13 @@ export default function Search() {
   useEffect(() => {
     // Reset coordinates when the component mounts
     setCoordinates([40.7, -74]);
-  }, [setCoordinates]); 
-  
-  const handleSubmit = async () => {
+  }, [setCoordinates]);
+
+  const handleSubmit = async (event) => {
     try {
+      event.preventDefault();
       setAddress(input);
-    
+      setSubmitting(true);
       // Translate OSM search result to database entries
       const translateSpecialCase = (state, county) => {
         if (state === "New York" && county === "Kings") return "Brooklyn";
@@ -40,7 +42,7 @@ export default function Search() {
 
       // Fetch coordinates
       const { data: [lookup] } = await axios.get(`https://nominatim.openstreetmap.org/search?q=${input}&format=json&addressdetails=1`);
-      console.log("lookup: ",lookup);
+      console.log("lookup: ", lookup);
       const coords = [parseFloat(lookup.lat), parseFloat(lookup.lon)];
       setCoordinates(coords);
 
@@ -69,6 +71,8 @@ export default function Search() {
     } catch (err) {
       setError('Error fetching data');
       console.error(err);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -85,11 +89,11 @@ export default function Search() {
           <h3 className="search-heading">Find Organic Recycling Information</h3>
           <p className="search-description">Enter information to search services in your area.</p>
         </div>
-        <div className='search-address-container'>
+        <form className='search-address-container' onSubmit={handleSubmit}>
           <h4 className='search-address-heading'>Address (Required)</h4>
           <input className="search-address-field" type="text" value={input} onChange={e => setInput(e.target.value)} />
-          <button className='search-button' onClick={handleSubmit}>Search</button>
-        </div>
+          <button className='search-button' type="submit" disabled={submitting}>Search</button>
+        </form>
         <div className='search-legend'>
           <div className='search-legend-description'>Organic Waste Bans & Recycling Policies</div>
           <div className='search-policy-container'>

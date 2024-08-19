@@ -11,9 +11,9 @@ import { useSmartBinContext } from '../components/smartBinsProvider.js';
 
 export default function SearchResult() {
   const { address, setAddress, singleCounty, setSingleCounty, setCoordinates } = useCountyContext();
-  const { setDropOffs,dropOffs } = useDropOffContext();
-  const { setMicrohaulers,microhaulers } = useMicrohaulerContext();
-  const { setSmartBins,smartBins } = useSmartBinContext();
+  const { setDropOffs, dropOffs } = useDropOffContext();
+  const { setMicrohaulers, microhaulers } = useMicrohaulerContext();
+  const { setSmartBins, smartBins } = useSmartBinContext();
 
   return (
     <div className='search-result-page'>
@@ -29,18 +29,17 @@ export default function SearchResult() {
         </div>
       </div>
       <div className='organics-recycling-info-container'>
-        <button onClick={(e) => { 
-          setAddress("");  
+        <button onClick={(e) => {
+          setAddress("");
           setSingleCounty({});
           setSmartBins([]);
           setMicrohaulers([]);
           setDropOffs([]);
           setCoordinates([]);
           localStorage.clear();
-          
-          }} >
+        }} >
           <Link className='back-button' to="/search">&nbsp;&nbsp;&nbsp;Back to Search</Link>
-            </button>
+        </button>
         <OrganicsRecyclingInfo address={address} />
       </div>
     </div>

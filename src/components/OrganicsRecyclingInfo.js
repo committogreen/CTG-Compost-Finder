@@ -17,6 +17,11 @@ const zipToCountyId = {
 
 export default function OrganicsRecyclingInfo({ address }) {
   const [shownItem, setShownItem] = useState("pillars");
+  const [suggestedName, setSuggestedName] = useState("");
+  const [suggestedAddress, setSuggestedAddress] = useState("");
+  const [suggestedEmail, setSuggestedEmail] = useState("");
+  const [suggestedPhoneNum, setSuggestedPhoneNum] = useState("");
+  const [suggestedWebsite, setSuggestedWebsite] = useState("");
   const { singleCounty, selectedLocation } = useCountyContext();
   const { dropOffs } = useDropOffContext();
   const { microhaulers } = useMicrohaulerContext();
@@ -29,12 +34,17 @@ export default function OrganicsRecyclingInfo({ address }) {
       setShownItem("");
     }
     else {
-      console.log("In the else statement", event.target.name);
       setShownItem(event.target.name);
     }
   }
   // everytime a user clicks a marker on the map::
   //wheather it be a smartBin or dropoff -> setShownItem("solution");
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    //insert POST
+  }
+
   useEffect(() => {
     if (Object.keys(selectedLocation).length !== 0) {
       console.log("selectedLocation", selectedLocation)
@@ -146,7 +156,50 @@ export default function OrganicsRecyclingInfo({ address }) {
           </button>
         </div>
         <div className="OrganicsRecyclingInfo-Description">
-          {shownItem == "suggestions" ? "Insert suggestion here" : ""}
+          {shownItem == "suggestions" ?
+            <form onSubmit={handleSubmit}>
+              <div>Name: <input type="text" value={suggestedName} onChange={e => setSuggestedName(e.target.value)} /></div>
+              <div>Address: <input type="text" value={suggestedAddress} onChange={(e) => { setSuggestedAddress(e.target.value) }} /></div>
+              <div>Email: <input type="text" value={suggestedEmail} onChange={(e) => { setSuggestedEmail(e.target.value) }} /></div>
+              <div>Website: <input type="text" value={suggestedWebsite} onChange={(e) => { setSuggestedWebsite(e.target.value) }} /></div>
+              <div>Phone Number: <input type="text" value={suggestedPhoneNum} onChange={(e) => { setSuggestedPhoneNum(e.target.value) }} /></div>
+              <button className="search-button" type="submit">Submit</button>
+            </form>
+            : ""}
+        </div>
+      </div>
+      <div className="OrganicsRecyclingInfo-Section">
+        <div className="OrganicsRecyclingInfo-Dropdown">
+          <img className="OrganicsRecyclingInfo-Icon" src={faqIcon}></img>
+          <h3 className="OrganicsRecyclingInfo-Header">
+            Composting Tips
+          </h3>
+          <button name="tips" className={shownItem === "tips" ? "collapse-button" : "expand-button"} onClick={expand}>
+          </button>
+        </div>
+        <div className="OrganicsRecyclingInfo-Description">
+          {shownItem == "tips" ?
+            <div>
+              <h4>Odor Control</h4>
+              Line your bins with newspaper and sprinkle baking soda on the lining to reduce odors.
+              Create a mixture of tree oil and water, then spray it on your bins to tackle the odor problem effectively.
+            </div>
+            : ""}
+        </div>
+      </div>
+      <div className="OrganicsRecyclingInfo-Section">
+        <div className="OrganicsRecyclingInfo-Dropdown">
+          <img className="OrganicsRecyclingInfo-Icon" src={faqIcon}></img>
+          <h3 className="OrganicsRecyclingInfo-Header">
+            No services in your area? Contact your representative!
+          </h3>
+          <button name="contact" className={shownItem === "contact" ? "collapse-button" : "expand-button"} onClick={expand}>
+          </button>
+        </div>
+        <div className="OrganicsRecyclingInfo-Description">
+          {shownItem == "contact" ?
+            "Insert link here"
+            : ""}
         </div>
       </div>
     </div>
