@@ -5,22 +5,22 @@ import smartBin from "../assets/smartBinIcon.png";
 
 export const dropOffIcon = new Icon({
   iconUrl: dropOff,
-  iconAnchor: [0, 55],
-  popupAnchor: [10, -44],
+  iconAnchor: [0, 0],
+  popupAnchor: [7, 0],
   iconSize: [15, 25],
 })
 
 export const locationIcon = new Icon({
   iconUrl: locationMarker,
-  iconAnchor: [10, 50],
-  popupAnchor: [10, -40],
+  iconAnchor: [0, 0],
+  popupAnchor: [17, 0],
   iconSize: [35, 50],
 })
 
 export const smartBinIcon=new Icon({
   iconUrl: smartBin,
-  iconAnchor: [10, 50],
-  popupAnchor: [10, -40],
+  iconAnchor: [0, 0],
+  popupAnchor: [7, 0],
   iconSize: [15, 25],
 
 })

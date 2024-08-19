@@ -13,13 +13,16 @@ import moderatePolicyIcon from "../assets/moderatePolicyIcon.png";
 import weakPolicyIcon from "../assets/weakPolicyIcon.png";
 import noPolicyIcon from "../assets/noPolicyIcon.png";
 
+//supabase
+import supabase from '../supabase/supabase.js';
+
 export default function Search() {
   const [input, setInput] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const { setAddress, setSingleCounty, setCoordinates } = useCountyContext();
   const { setDropOffs } = useDropOffContext();
-  const { setMicroHaulers } = useMicrohaulerContext();
+  const { setMicrohaulers } = useMicrohaulerContext();
   const { setSmartBins } = useSmartBinContext();
   const navigate = useNavigate();
 
@@ -47,23 +50,41 @@ export default function Search() {
       setCoordinates(coords);
 
       const state = lookup.address.state;
-      const county = (lookup.address.suburb ? lookup.address.suburb.replace(/ County$/, '') : translateSpecialCase(state, lookup.address.county.replace(/ County$/, '')));
+      const county = (lookup.address.suburb ? translateSpecialCase(state, lookup.address.suburb.replace(/ County$/, '')) : translateSpecialCase(state, lookup.address.county.replace(/ County$/, '')));
       console.log(county, state);
 
+      /*
+      Supabase API
+      */
+
+      // Fetch county data
+      const { data: countyData, error } = await supabase.from('County').select('*').match({ 'name': county, 'state': state }).single()
+      console.log("county", countyData)
+      setSingleCounty(countyData)
+
+      // Fetch DropOffs, Microhaulers, and SmartBins
+      const [{ data: dropOffsQuery }, { data: microhaulersQuery }, { data: smartBinsQuery }] = await Promise.all([
+        supabase.from('Dropoff').select('*').match({ 'county': countyData.name, 'state': countyData.state }),
+        supabase.from('Microhauler').select('*').match({ 'county': countyData.name, 'state': countyData.state }),
+        supabase.from('Smartbin').select('*').match({ 'county': countyData.name, 'state': countyData.state })
+      ])
+
+      /*
+      PostgreSQL Backend
       // Fetch county data
       const { data: countyData } = await axios.get(`http://54.242.10.76:5000/county/${county}/${state}`);
       setSingleCounty(countyData);
 
-      // Fetch DropOffs, MicroHaulers, and SmartBins
-      const [{ data: queryDropOffs }, { data: queryMicroHaulers }, { data: querySmartBins }] = await Promise.all([
+      // Fetch DropOffs, Microhaulers, and SmartBins
+      const [{ data: dropOffsQuery }, { data: microhaulersQuery }, { data: smartBinsQuery }] = await Promise.all([
         axios.get(`http://54.242.10.76:5000/dropOff/${countyData.name}/${countyData.state}`),
         axios.get(`http://54.242.10.76:5000/microHauler/${countyData.name}/${countyData.state}`),
         axios.get(`http://54.242.10.76:5000/smartBin/${countyData.name}/${countyData.state}`),
       ]);
-
-      setDropOffs(queryDropOffs);
-      setMicroHaulers(queryMicroHaulers);
-      setSmartBins(querySmartBins);
+      */
+      setDropOffs(dropOffsQuery);
+      setMicrohaulers(microhaulersQuery);
+      setSmartBins(smartBinsQuery);
 
       // Navigate to results page
       navigate("/search/result");
