@@ -102,7 +102,13 @@ export default function OrganicsRecyclingInfo({ address }) {
         </div>
         <div className="OrganicsRecyclingInfo-Description">
           {shownItem == "facility" ? <>{microhaulers.map((microhauler) => (
-            <p key={microhauler.id}> {microhauler.name}, {microhauler.phoneNum}</p>
+            <div key={microhauler.id}> 
+            <p className="OrganicsRecyclingInfo-DescriptionName">{microhauler.name}</p>
+              <p>{microhauler.address ? <div><span className="OrganicsRecyclingInfo-DescriptionLabel">Address: </span>{microhauler.address}</div> : ""}</p>
+              <p>{microhauler.website ? <div><span className="OrganicsRecyclingInfo-DescriptionLabel">Website: </span>{microhauler.website}</div> : ""}</p>
+              <p>{microhauler.email ? <div><span className="OrganicsRecyclingInfo-DescriptionLabel">Email: </span>{microhauler.email}</div> : ""}</p>
+              <p>{microhauler.phoneNum ? <div><span className="OrganicsRecyclingInfo-DescriptionLabel">Phone Number: </span>{microhauler.phoneNum}</div> : ""}</p>
+          </div>
           ))}</> : ""}
         </div>
       </div>
