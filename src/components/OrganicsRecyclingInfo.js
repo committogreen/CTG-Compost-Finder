@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+import { useNavigate } from "react-router-dom";
 import guideIcon from "../assets/guideIcon.png";
 import solutionIcon from "../assets/solutionIcon.png";
 import facilityIcon from "../assets/facilityIcon.png";
@@ -22,12 +24,18 @@ export default function OrganicsRecyclingInfo({ address }) {
   const [suggestedEmail, setSuggestedEmail] = useState("");
   const [suggestedPhoneNum, setSuggestedPhoneNum] = useState("");
   const [suggestedWebsite, setSuggestedWebsite] = useState("");
+  const [showEmail, setShowEmail] = useState(false);
+  const [suggestedImage, setSuggestedImage] = useState(null);
+  const [updateKey, setUpdateKey] = useState(Date.now());
   const { singleCounty, selectedLocation } = useCountyContext();
   const { dropOffs } = useDropOffContext();
   const { microhaulers } = useMicrohaulerContext();
-
+  const navigate = useNavigate();
   const [error, setError] = useState(null);
 
+  function goToCompostingTips() {
+    navigate("/composting-tips");
+  }
   function expand(event) {
     if (shownItem == event.target.name) {
       console.log("shownItem", shownItem);
@@ -102,13 +110,13 @@ export default function OrganicsRecyclingInfo({ address }) {
         </div>
         <div className="OrganicsRecyclingInfo-Description">
           {shownItem == "facility" ? <>{microhaulers.map((microhauler) => (
-            <div key={microhauler.id}> 
-            <p className="OrganicsRecyclingInfo-DescriptionName">{microhauler.name}</p>
+            <div key={microhauler.id}>
+              <p className="OrganicsRecyclingInfo-DescriptionName">{microhauler.name}</p>
               <p>{microhauler.address ? <div><span className="OrganicsRecyclingInfo-DescriptionLabel">Address: </span>{microhauler.address}</div> : ""}</p>
               <p>{microhauler.website ? <div><span className="OrganicsRecyclingInfo-DescriptionLabel">Website: </span>{microhauler.website}</div> : ""}</p>
               <p>{microhauler.email ? <div><span className="OrganicsRecyclingInfo-DescriptionLabel">Email: </span>{microhauler.email}</div> : ""}</p>
               <p>{microhauler.phoneNum ? <div><span className="OrganicsRecyclingInfo-DescriptionLabel">Phone Number: </span>{microhauler.phoneNum}</div> : ""}</p>
-          </div>
+            </div>
           ))}</> : ""}
         </div>
       </div>
@@ -169,6 +177,16 @@ export default function OrganicsRecyclingInfo({ address }) {
               <div>Email: <input type="text" value={suggestedEmail} onChange={(e) => { setSuggestedEmail(e.target.value) }} /></div>
               <div>Website: <input type="text" value={suggestedWebsite} onChange={(e) => { setSuggestedWebsite(e.target.value) }} /></div>
               <div>Phone Number: <input type="text" value={suggestedPhoneNum} onChange={(e) => { setSuggestedPhoneNum(e.target.value) }} /></div>
+              <div>Image: <input type="file" key={updateKey} onChange={(e) => { setSuggestedImage(e.target.files[0]) }} /></div>
+              {suggestedImage && (
+                <div>
+                  <img 
+                  alt="invalid image"
+                  style={{"width" : "20rem"}}
+                  src={URL.createObjectURL(suggestedImage)} />
+                  <button onClick={(e) => {setSuggestedImage(null); setUpdateKey(Date.now())}}>Remove Image</button>
+                </div>
+              )}
               <button className="search-button" type="submit">Submit</button>
             </form>
             : ""}
@@ -187,8 +205,11 @@ export default function OrganicsRecyclingInfo({ address }) {
           {shownItem == "tips" ?
             <div>
               <h4>Odor Control</h4>
+              <div>
               Line your bins with newspaper and sprinkle baking soda on the lining to reduce odors.
               Create a mixture of tree oil and water, then spray it on your bins to tackle the odor problem effectively.
+              </div>
+              <button onClick={goToCompostingTips}>See More</button>
             </div>
             : ""}
         </div>
@@ -204,7 +225,33 @@ export default function OrganicsRecyclingInfo({ address }) {
         </div>
         <div className="OrganicsRecyclingInfo-Description">
           {shownItem == "contact" ?
-            "Insert link here"
+            <>
+              <button onClick={() => setShowEmail(true)}>
+                Sample Email
+              </button>
+              {showEmail && createPortal(
+                <div className="emailModal">
+                  Take Action Now! Advocate for Composting in Your Community.<br/>
+                  Download the sample email and send it to your Mayor.<br/>
+
+                  {">>>"}<br/>
+
+                  Subject: Request for Composting Program in [City]<br/>
+                  Dear Mayor [Mayor’s Last Name],<br/><br />
+                  I am writing to request the implementation of a composting program in our community. As a resident of [City], I am committed to environmental sustainability and believe that a citywide composting solution would significantly reduce waste, lower greenhouse gas emissions, and provide valuable resources for local agriculture.
+                  Many cities across the nation have successfully introduced composting initiatives, demonstrating the benefits of diverting organic waste from landfills. By adopting a similar approach, [City] can lead in sustainability, reduce our environmental impact, and foster a culture of responsibility.
+                  I urge you to consider the potential of curbside composting, community composting sites, or partnerships with local micro-haulers to make composting accessible to all residents. I am eager to support this initiative and am willing to assist in any capacity needed to bring this important program to life.
+                  Thank you for your attention to this matter. I look forward to the possibility of discussing how we can move forward with this initiative.<br></br>
+                  Best regards,<br/><br/>
+                  [Your Full Name]<br/>
+                  [Your Address]<br/>
+                  [City, State, ZIP Code]<br/>
+                  [Your Phone Number]<br/>
+
+                  <button onClick={() => setShowEmail(false)}>Close</button>
+                </div>, document.body
+              )}
+            </>
             : ""}
         </div>
       </div>

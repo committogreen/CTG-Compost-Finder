@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Home from "./pages/Home";
 import SearchResult from "./pages/SearchResult";
 import Search from "./pages/Search";
-
+import CompostingTips from "./pages/CompostingTips";
 export default function App() {
   const [backendData, setBackendData] = useState([{}]);
 
@@ -29,6 +29,7 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="/search" element={<Search />} />
           <Route path="/search/result" element={<SearchResult />} />
+          <Route path="/composting-tips" element={<CompostingTips/>} />
         </Routes>
       </BrowserRouter>
     </>
