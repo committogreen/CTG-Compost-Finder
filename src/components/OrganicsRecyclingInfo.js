@@ -19,6 +19,10 @@ const zipToCountyId = {
 
 export default function OrganicsRecyclingInfo({ address }) {
   const [shownItem, setShownItem] = useState("pillars");
+  const [serviceAddress, setServiceAddress] = useState("");
+  const [serviceCity, setServiceCity] = useState("");
+  const [serviceState, setServiceState] = useState("");
+  const [serviceZipCode, setServiceZipCode] = useState("");
   const [suggestedName, setSuggestedName] = useState("");
   const [suggestedAddress, setSuggestedAddress] = useState("");
   const [suggestedEmail, setSuggestedEmail] = useState("");
@@ -164,31 +168,72 @@ export default function OrganicsRecyclingInfo({ address }) {
         <div className="OrganicsRecyclingInfo-Dropdown">
           <img className="OrganicsRecyclingInfo-Icon" src={faqIcon}></img>
           <h3 className="OrganicsRecyclingInfo-Header">
-            Don't see your spot? Let us know!
+            Get Involved: Let's Bring Composting to your Community
           </h3>
           <button name="suggestions" className={shownItem === "suggestions" ? "collapse-button" : "expand-button"} onClick={expand}>
           </button>
         </div>
         <div className="OrganicsRecyclingInfo-Description">
           {shownItem == "suggestions" ?
-            <form onSubmit={handleSubmit}>
-              <div>Name: <input type="text" value={suggestedName} onChange={e => setSuggestedName(e.target.value)} /></div>
-              <div>Address: <input type="text" value={suggestedAddress} onChange={(e) => { setSuggestedAddress(e.target.value) }} /></div>
-              <div>Email: <input type="text" value={suggestedEmail} onChange={(e) => { setSuggestedEmail(e.target.value) }} /></div>
-              <div>Website: <input type="text" value={suggestedWebsite} onChange={(e) => { setSuggestedWebsite(e.target.value) }} /></div>
-              <div>Phone Number: <input type="text" value={suggestedPhoneNum} onChange={(e) => { setSuggestedPhoneNum(e.target.value) }} /></div>
-              <div>Image: <input type="file" key={updateKey} onChange={(e) => { setSuggestedImage(e.target.files[0]) }} /></div>
-              {suggestedImage && (
-                <div>
-                  <img 
-                  alt="invalid image"
-                  style={{"width" : "20rem"}}
-                  src={URL.createObjectURL(suggestedImage)} />
-                  <button onClick={(e) => {setSuggestedImage(null); setUpdateKey(Date.now())}}>Remove Image</button>
-                </div>
+            <>
+              <form onSubmit={handleSubmit}>
+                <div>Spot a Great Location for Composting?</div>
+                <div>Name: <input type="text" value={suggestedName} onChange={e => setSuggestedName(e.target.value)} /></div>
+                <div>Address: <input type="text" value={suggestedAddress} onChange={(e) => { setSuggestedAddress(e.target.value) }} /></div>
+                <div>Email: <input type="text" value={suggestedEmail} onChange={(e) => { setSuggestedEmail(e.target.value) }} /></div>
+                <div>Website: <input type="text" value={suggestedWebsite} onChange={(e) => { setSuggestedWebsite(e.target.value) }} /></div>
+                <div>Phone Number: <input type="text" value={suggestedPhoneNum} onChange={(e) => { setSuggestedPhoneNum(e.target.value) }} /></div>
+                <div>Image: <input type="file" key={updateKey} onChange={(e) => { setSuggestedImage(e.target.files[0]) }} /></div>
+                <div>Help us find the best locations for composting bins or facilities in your neighborhood.</div>
+                {suggestedImage && (
+                  <div>
+                    <img
+                      alt="invalid image"
+                      style={{ "width": "20rem" }}
+                      src={URL.createObjectURL(suggestedImage)} />
+                    <button onClick={(e) => { setSuggestedImage(null); setUpdateKey(Date.now()) }}>Remove Image</button>
+                  </div>
+                )}
+                <button className="search-button" type="submit">Submit</button>
+              </form>
+              <form onSubmit={handleSubmit}>
+                <div>Would You Like Composting Services in Your Area?</div>
+                <div>Address: <input type="text" value={serviceAddress} onChange={(e) => { setServiceAddress(e.target.value) }} /></div>
+                <div>City: <input type="text" value={serviceCity} onChange={(e) => { setServiceCity(e.target.value) }} /></div>
+                <div>State: <input type="text" value={serviceState} onChange={(e) => { setServiceState(e.target.value) }} /></div>
+                <div>Zip Code: <input type="text" value={serviceZipCode} onChange={(e) => { setServiceZipCode(e.target.value) }} /></div>
+                <div>We'll use this information to identify areas with high demand fro composting services</div>
+                <button className="search-button" type="submit">Submit</button>
+              </form>
+              <div>Take Action: Contact Your Local Representative</div>
+              <button onClick={() => setShowEmail(true)}>
+                Sample Email
+              </button>
+              {/* start of moved contact dropdown */}
+              {showEmail && createPortal(
+                <div className="emailModal">
+                  Take Action Now! Advocate for Composting in Your Community.<br />
+                  Download the sample email and send it to your Mayor.<br />
+
+                  {">>>"}<br />
+
+                  Subject: Request for Composting Program in {serviceCity ? serviceCity : "[Your City]"}<br />
+                  Dear Mayor [Mayor’s Last Name],<br /><br />
+                  I am writing to request the implementation of a composting program in our community. As a resident of {serviceCity ? serviceCity : "[Your City]"}, I am committed to environmental sustainability and believe that a citywide composting solution would significantly reduce waste, lower greenhouse gas emissions, and provide valuable resources for local agriculture.
+                  Many cities across the nation have successfully introduced composting initiatives, demonstrating the benefits of diverting organic waste from landfills. By adopting a similar approach, {serviceCity ? serviceCity : "[Your City]"} can lead in sustainability, reduce our environmental impact, and foster a culture of responsibility.
+                  I urge you to consider the potential of curbside composting, community composting sites, or partnerships with local micro-haulers to make composting accessible to all residents. I am eager to support this initiative and am willing to assist in any capacity needed to bring this important program to life.
+                  Thank you for your attention to this matter. I look forward to the possibility of discussing how we can move forward with this initiative.<br></br>
+                  Best regards,<br /><br />
+                  [Your Full Name]<br />
+                  {serviceAddress ? serviceAddress : "[Your Address]"}<br />
+                  {serviceCity ? serviceCity : "[Your City]"}, {serviceState ? serviceState : "[Your State]"} {serviceZipCode ? serviceZipCode : "[Your Zip Code]"}<br />
+                  [Your Phone Number]<br />
+
+                  <button onClick={() => setShowEmail(false)}>Close</button>
+                </div>, document.body
               )}
-              <button className="search-button" type="submit">Submit</button>
-            </form>
+              {/* end of moved contact dropdown */}
+            </>
             : ""}
         </div>
       </div>
@@ -206,15 +251,15 @@ export default function OrganicsRecyclingInfo({ address }) {
             <div>
               <h4>Odor Control</h4>
               <div>
-              Line your bins with newspaper and sprinkle baking soda on the lining to reduce odors.
-              Create a mixture of tree oil and water, then spray it on your bins to tackle the odor problem effectively.
+                Line your bins with newspaper and sprinkle baking soda on the lining to reduce odors.
+                Create a mixture of tree oil and water, then spray it on your bins to tackle the odor problem effectively.
               </div>
               <button onClick={goToCompostingTips}>See More</button>
             </div>
             : ""}
         </div>
       </div>
-      <div className="OrganicsRecyclingInfo-Section">
+      {/* <div className="OrganicsRecyclingInfo-Section">
         <div className="OrganicsRecyclingInfo-Dropdown">
           <img className="OrganicsRecyclingInfo-Icon" src={faqIcon}></img>
           <h3 className="OrganicsRecyclingInfo-Header">
@@ -231,22 +276,22 @@ export default function OrganicsRecyclingInfo({ address }) {
               </button>
               {showEmail && createPortal(
                 <div className="emailModal">
-                  Take Action Now! Advocate for Composting in Your Community.<br/>
-                  Download the sample email and send it to your Mayor.<br/>
+                  Take Action Now! Advocate for Composting in Your Community.<br />
+                  Download the sample email and send it to your Mayor.<br />
 
-                  {">>>"}<br/>
+                  {">>>"}<br />
 
-                  Subject: Request for Composting Program in [City]<br/>
-                  Dear Mayor [Mayor’s Last Name],<br/><br />
+                  Subject: Request for Composting Program in [City]<br />
+                  Dear Mayor [Mayor’s Last Name],<br /><br />
                   I am writing to request the implementation of a composting program in our community. As a resident of [City], I am committed to environmental sustainability and believe that a citywide composting solution would significantly reduce waste, lower greenhouse gas emissions, and provide valuable resources for local agriculture.
                   Many cities across the nation have successfully introduced composting initiatives, demonstrating the benefits of diverting organic waste from landfills. By adopting a similar approach, [City] can lead in sustainability, reduce our environmental impact, and foster a culture of responsibility.
                   I urge you to consider the potential of curbside composting, community composting sites, or partnerships with local micro-haulers to make composting accessible to all residents. I am eager to support this initiative and am willing to assist in any capacity needed to bring this important program to life.
                   Thank you for your attention to this matter. I look forward to the possibility of discussing how we can move forward with this initiative.<br></br>
-                  Best regards,<br/><br/>
-                  [Your Full Name]<br/>
-                  [Your Address]<br/>
-                  [City, State, ZIP Code]<br/>
-                  [Your Phone Number]<br/>
+                  Best regards,<br /><br />
+                  [Your Full Name]<br />
+                  [Your Address]<br />
+                  [City, State, ZIP Code]<br />
+                  [Your Phone Number]<br />
 
                   <button onClick={() => setShowEmail(false)}>Close</button>
                 </div>, document.body
@@ -254,7 +299,7 @@ export default function OrganicsRecyclingInfo({ address }) {
             </>
             : ""}
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

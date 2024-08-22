@@ -19,6 +19,7 @@ import supabase from '../supabase/supabase.js';
 export default function Search() {
   const [input, setInput] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [searchText, setSearchText] = useState("Search");
   const [error, setError] = useState("");
   const { setAddress, setSingleCounty, setCoordinates } = useCountyContext();
   const { setDropOffs } = useDropOffContext();
@@ -34,6 +35,8 @@ export default function Search() {
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
+      setSubmitting(true);
+      setSearchText("Loading")
       setAddress(input);
       setSubmitting(true);
       // Translate OSM search result to database entries
@@ -93,6 +96,7 @@ export default function Search() {
       setError('Error fetching data');
       console.error(err);
     } finally {
+      setSearchText("Search")
       setSubmitting(false);
     }
   };
@@ -113,7 +117,7 @@ export default function Search() {
         <form className='search-address-container' onSubmit={handleSubmit}>
           <h4 className='search-address-heading'>Address (Required)</h4>
           <input className="search-address-field" type="text" value={input} onChange={e => setInput(e.target.value)} />
-          <button className='search-button' type="submit" disabled={submitting}>Search</button>
+          <button className='search-button' type="submit" disabled={submitting}>{searchText}</button>
         </form>
         <div className='search-legend'>
           <div className='search-legend-description'>Organic Waste Bans & Recycling Policies</div>
