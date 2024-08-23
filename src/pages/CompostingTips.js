@@ -1,10 +1,14 @@
 import { useNavigate } from "react-router-dom"
 
-export default function Home() {
+export default function CompostingTips() {
   const navigate = useNavigate();
+
+  function handleClick() {
+    navigate("/search/result")
+  }
   
   return (
-    <div className="Home">
+    <div className="Composting-Tips">
       Composting 101: Answers to All Your Questions<br/>
       Q+A on composting is listed here<br/>
       Basic information: https://committogreen.com/pages/composting-101-a-comprehensive-guide-to-what-you-can-and-cannot-compost<br/><br/>
@@ -26,8 +30,8 @@ export default function Home() {
       Opt for a reusable sac to transport your organic waste to the nearest Smart Compost Bins.<br/>
       Paper and compostable bags are convenient as they break down into compost.<br/>
       In conclusion, composting doesn't have to be unpleasant or smelly. With these expert tips and tricks, you'll become a composting pro in no time.<br/><br/>
-      When the city agency signs on and has their own page, they will have specific organic waste for their program.
-      <button onClick={navigate("/search/result")}>Go back</button>
+      When the city agency signs on and has their own page, they will have specific organic waste for their program.<br/>
+      <button className="tips-button" onClick={handleClick}>Go back</button>
     </div>
   )
 }

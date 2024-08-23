@@ -233,6 +233,7 @@ body {
 
 .organics-recycling-info-container {
   width: 30%;
+  min-width:36rem;
 }
 
 .back-button {
@@ -451,11 +452,81 @@ td {
   margin-left: -25%; 
   margin-right: 25%;
   padding: 2rem;
-  height:80%;
+  height:83%;
   overflow: auto;
   z-index: 90 !important;
-  background-color: #00c068;
+  background-color: var(--greenOnClick);
+  border: 3px solid #292a3c;
+  border-radius: 3rem;
 }
+
+.compostingForm {
+  display:flex;
+  flex-direction: column;
+  gap:.5rem;
+}
+
+label {
+  width:100%;
+}
+
+.formInput {
+  padding-left: 1rem;
+  display: inline;
+  float:right;
+  background-color: #606073;
+  border: 1px solid white;
+  border-radius: .5rem;
+  min-width: 70%;
+}
+
+.formInputImage {
+  float: right;
+  max-width: 70%;
+}
+
+.submit-button {
+  background-color: var(--green);
+  width: 6rem;
+  height: 2.5rem;
+  border-radius: 3rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.open-email-button {
+  background-color: var(--green);
+  width: 6rem;
+  height: 2.5rem;
+  border-radius: 3rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.close-email-button {
+  background-color: gray;
+  width: 6rem;
+  height: 2rem;
+  border-radius: 3rem;
+  margin-top: .5rem;
+}
+
+.tips-button {
+  background-color: var(--green);
+  padding: 0 1rem;
+  height: 2.5rem;
+  border-radius: 3rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+/*Composting Tips */ 
+
+.Composting-Tips {
+  margin:3rem;
+  padding-left:4rem;
+}
+
 /* FourPillarsDescription */
 
 .FourPillars-Section {
